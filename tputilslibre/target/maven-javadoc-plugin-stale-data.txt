@@ -1,0 +1,50 @@
+@options
+@packages
+@argfile
+-encoding
+'UTF-8'
+-protected
+-source
+'8'
+-sourcepath
+'c:/Users/belki/OneDrive/Bureau/tputilslibre/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2024. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'c:/Users/belki/OneDrive/Bureau/tputilslibre/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'tputilslibre 1.0-SNAPSHOT API'
+-linkoffline
+'https://docs.oracle.com/javase/8/docs/api' 'c:/Users/belki/OneDrive/Bureau/tputilslibre/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'tputilslibre 1.0-SNAPSHOT API'
+daga.imane
+'c:/Users/belki/OneDrive/Bureau/tputilslibre/src/main/java/daga/imane/App.java'
+'c:/Users/belki/OneDrive/Bureau/tputilslibre/src/main/java/daga/imane/MyClass.java'
+c:\Users\belki\OneDrive\Bureau\tputilslibre\src\main\java = 1714755272663
+c:\Users\belki\OneDrive\Bureau\tputilslibre\target\site\apidocs\allclasses-index.html = 1714759290659
+c:\Users\belki\OneDrive\Bureau\tputilslibre\target\site\apidocs\allpackages-index.html = 1714759290664
+c:\Users\belki\OneDrive\Bureau\tputilslibre\target\site\apidocs\copy.svg = 1714759290709
+c:\Users\belki\OneDrive\Bureau\tputilslibre\target\site\apidocs\element-list = 1714759290609
+c:\Users\belki\OneDrive\Bureau\tputilslibre\target\site\apidocs\help-doc.html = 1714759290701
+c:\Users\belki\OneDrive\Bureau\tputilslibre\target\site\apidocs\index-all.html = 1714759290684
+c:\Users\belki\OneDrive\Bureau\tputilslibre\target\site\apidocs\index.html = 1714759290690
+c:\Users\belki\OneDrive\Bureau\tputilslibre\target\site\apidocs\link.svg = 1714759290710
+c:\Users\belki\OneDrive\Bureau\tputilslibre\target\site\apidocs\member-search-index.js = 1714759290672
+c:\Users\belki\OneDrive\Bureau\tputilslibre\target\site\apidocs\module-search-index.js = 1714759290667
+c:\Users\belki\OneDrive\Bureau\tputilslibre\target\site\apidocs\overview-tree.html = 1714759290644
+c:\Users\belki\OneDrive\Bureau\tputilslibre\target\site\apidocs\package-search-index.js = 1714759290669
+c:\Users\belki\OneDrive\Bureau\tputilslibre\target\site\apidocs\script.js = 1714759290706
+c:\Users\belki\OneDrive\Bureau\tputilslibre\target\site\apidocs\search-page.js = 1714759290716
+c:\Users\belki\OneDrive\Bureau\tputilslibre\target\site\apidocs\search.html = 1714759290688
+c:\Users\belki\OneDrive\Bureau\tputilslibre\target\site\apidocs\search.js = 1714759290713
+c:\Users\belki\OneDrive\Bureau\tputilslibre\target\site\apidocs\stylesheet.css = 1714759290704
+c:\Users\belki\OneDrive\Bureau\tputilslibre\target\site\apidocs\tag-search-index.js = 1714759290673
+c:\Users\belki\OneDrive\Bureau\tputilslibre\target\site\apidocs\type-search-index.js = 1714759290670

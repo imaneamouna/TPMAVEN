@@ -1,0 +1,229 @@
+Ep%6#8XCt9#Rc)m
+
+
+extension=php_ftp.dll
+
+
+package com.example.databasesqliteexample;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.ListActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+
+import java.util.List;
+import java.util.Random;
+
+public class TestDatabaseActivity extends ListActivity {
+    private C datasource;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        datasource = new CommentsDataSource(this);
+        datasource.open();
+
+        List<Comment> values = datasource.getAllComments();
+
+        // utilisez SimpleCursorAdapter pour afficher les
+        // Ã©lÃ©ments dans une ListView
+      ****  ArrayAdapter<Comment> adapter = new ArrayAdapter<Comment>(this,
+                android.R.layout.simple_list_item_1, values);
+        setListAdapter(adapter);********
+    }
+    // Sera appelÃ©e par l'attribut onClick
+    // des boutons dÃ©clarÃ©s dans main.xml
+    public void onClick(View view) {
+        @SuppressWarnings("unchecked")
+        ArrayAdapter<Comment> adapter = (ArrayAdapter<Comment>) getListAdapter();
+        Comment comment = null;
+        switch (view.getId()) {
+            case R.id.add:
+                String[] comments = new String[] { "Cool", "Very nice", "Hate it" };
+                int nextInt = new Random().nextInt(3);
+                // enregistrer le nouveau commentaire dans la base de donnÃ©es
+                comment = datasource.createComment(comments[nextInt]);
+                adapter.add(comment);
+                break;
+            case R.id.delete:
+                if (getListAdapter().getCount() > 0) {
+                    comment = (Comment) getListAdapter().getItem(0);
+                    datasource.deleteComment(comment);
+                    adapter.remove(comment);
+                }
+                break;
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onResume() {
+        datasource.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        datasource.close();
+        super.onPause();
+    }
+
+
+
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+package com.example.databasesqliteexample;
+
+public class Comment {
+    private long id;
+    private String comment;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    // Sera utilisÃ©e par ArrayAdapter dans la ListView
+    @Override
+    public String toString() {
+        return comment;
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+package com.example.databasesqliteexample;
+
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+public class CommentDbHelper extends SQLiteOpenHelper {
+    public static final String TABLE__NAME = "comments";
+    public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_COMMENT = "comment";
+
+    private static final String DATABASE_NAME = "commments.db";
+    private static final int DATABASE_VERSION = 1;
+
+    // Commande sql ( sql statement) pour la crÃ©ation de la table de la base de donnÃ©es
+    private static final String DATABASE_CREATE = "CREATE TABLE "
+            + TABLE__NAME + "(" + COLUMN_ID
+            + " INTEGER PRIMARY KEY autoincrement, " + COLUMN_COMMENT
+            + " text not null);";
+    // Commande sql ( sql statement) pour la supprsseion de la table de la base de donnÃ©es
+    private static final String SQL_DELETE_ENTRIES =
+            "DROP TABLE IF EXISTS " + TABLE__NAME;
+//conect with data base
+    public CommentDbHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(DATABASE_CREATE);
+    }
+
+    @Override
+   ***** public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.w(CommentDbHelper.class.getName(),
+                "Upgrading database from version " + oldVersion + " to "
+                        + newVersion + ", which will destroy all old data");
+        db.execSQL(SQL_DELETE_ENTRIES);
+        onCreate(db);
+    }*****
+}
+////////////////////////////////////////////////////////////////////////////////////////////////
+package com.example.databasesqliteexample;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class CommentsDataSource {
+    // Champs de la base de donnÃ©es
+    private SQLiteDatabase database;
+    private CommentDbHelper dbHelper;
+    private String[] allColumns = { dbHelper.COLUMN_ID,
+            CommentDbHelper.COLUMN_COMMENT };
+
+    public CommentsDataSource(Context context) {
+        dbHelper = new CommentDbHelper(context);
+    }
+
+   ****** public void open() throws SQLException {
+        database = dbHelper.getWritableDatabase();
+    }
+
+    public void close() {
+        dbHelper.close();
+    }************
+
+    public Comment createComment(String comment) {
+        ContentValues values = new ContentValues();
+        values.put(CommentDbHelper.COLUMN_COMMENT, comment);
+        long insertId = database.insert(CommentDbHelper.TABLE__NAME, null,
+                values);
+        Cursor cursor = database.query(CommentDbHelper.TABLE__NAME,
+                allColumns, CommentDbHelper.COLUMN_ID + " = " + insertId, null,
+                null, null, null);
+        cursor.moveToFirst();
+       ******* Comment newComment = cursorToComment(cursor);
+        cursor.close();
+        return newComment;*******
+    }
+
+    public void deleteComment(Comment comment) {
+        long id = comment.getId();
+        System.out.println("Comment deleted with id: " + id);
+        database.delete(CommentDbHelper.TABLE__NAME, CommentDbHelper.COLUMN_ID
+                + " = " + id, null);
+    }
+
+    public List<Comment> getAllComments() {
+        List<Comment> comments = new ArrayList<Comment>();
+
+        Cursor cursor = database.query(CommentDbHelper.TABLE__NAME,
+                allColumns, null, null, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Comment comment = cursorToComment(cursor);
+            comments.add(comment);
+            cursor.moveToNext();
+        }
+        // assurez-vous de la fermeture du curseur
+        cursor.close();
+        return comments;
+    }
+
+    private Comment cursorToComment(Cursor cursor) {
+        Comment comment = new Comment();
+        comment.setId(cursor.getLong(0));
+        comment.setComment(cursor.getString(1));
+        return comment;
+    }
+}
+An internal error occurred during: "AutoRegisterSchemeHandlersJob".
+Could not initialize class com.sun.jna.Native
